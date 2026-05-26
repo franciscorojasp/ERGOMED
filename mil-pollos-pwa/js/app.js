@@ -345,9 +345,44 @@ export function parseExcelWorkers(file) {
 }
 
 // =============================================================================
+// Theme Selection (Light / Dark)
+// =============================================================================
+function initTheme() {
+  const toggles = document.querySelectorAll('.theme-toggle-btn');
+  const savedTheme = localStorage.getItem('theme');
+  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  const theme = savedTheme || systemTheme;
+  
+  document.documentElement.setAttribute('data-theme', theme);
+  toggles.forEach(btn => updateThemeToggleIcon(btn, theme));
+
+  toggles.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      // Update all toggle icons on the page
+      document.querySelectorAll('.theme-toggle-btn').forEach(b => updateThemeToggleIcon(b, newTheme));
+    });
+  });
+}
+
+function updateThemeToggleIcon(btn, theme) {
+  if (!btn) return;
+  btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  btn.title = theme === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro';
+}
+
+// =============================================================================
 // Bootstrap
 // =============================================================================
 async function init() {
+  // Initialize visual theme
+  initTheme();
+
   // Register service worker
   if ('serviceWorker' in navigator) {
     try {

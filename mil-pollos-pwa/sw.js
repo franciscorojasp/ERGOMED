@@ -1,5 +1,5 @@
 // Service Worker – Mil Pollos Salud Ocupacional
-const CACHE_NAME = 'milpollos-v1.0';
+const CACHE_NAME = 'milpollos-v1.1';
 const ASSETS = [
   './',
   './index.html',
